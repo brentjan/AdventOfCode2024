@@ -2,24 +2,7 @@ def is_inbound(x, y, n, m):
     return 0 <= x < n and 0 <= y < m
 
 
-def get_strings_part1(x, y, lines, n, m):
-    strings = []
-    for dx in [-1, 0, 1]:
-        for dy in [-1, 0, 1]:
-            if dx != 0 or dy != 0:
-                string = lines[x][y]
-                for factor in range(1, 4):
-
-                    new_x, new_y = x+dx*factor, y+dy*factor
-                    string += lines[new_x][new_y] if is_inbound(new_x, new_y, n, m) else ""
-                
-                if len(string) == 4:
-                    strings.append(string)
-
-    return sum([string == 'XMAS' for string in strings])
-
-
-def get_strings(x, y, lines, n, m):
+def x_mas(x, y, lines, n, m):
     if not (0 < x < n - 1 and 0 < y < m - 1):
         return 0
     
@@ -42,6 +25,23 @@ with open(name) as file:
 
     for y in range(m):
         for x in range(n):
-            total += get_strings(x, y, lines, n, m)
+            total += x_mas(x, y, lines, n, m)
 
 print(total)
+
+
+# def get_strings_part1(x, y, lines, n, m):
+#     strings = []
+#     for dx in [-1, 0, 1]:
+#         for dy in [-1, 0, 1]:
+#             if dx != 0 or dy != 0:
+#                 string = lines[x][y]
+#                 for factor in range(1, 4):
+
+#                     new_x, new_y = x+dx*factor, y+dy*factor
+#                     string += lines[new_x][new_y] if is_inbound(new_x, new_y, n, m) else ""
+                
+#                 if len(string) == 4:
+#                     strings.append(string)
+
+#     return sum([string == 'XMAS' for string in strings])
