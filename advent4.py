@@ -1,18 +1,10 @@
-def is_inbound(x, y, n, m):
-    return 0 <= x < n and 0 <= y < m
-
-
 def x_mas(x, y, lines, n, m):
     if not (0 < x < n - 1 and 0 < y < m - 1):
         return 0
     
     diagonal_1 = lines[x-1][y-1] + lines[x][y] + lines[x+1][y+1]
     diagonal_2 = lines[x-1][y+1] + lines[x][y] + lines[x+1][y-1]
-
-    if diagonal_1 in ['MAS', 'SAM'] and diagonal_2 in ['MAS', 'SAM']:
-        return 1
-    else:
-        return 0
+    return diagonal_1 in ['MAS', 'SAM'] and diagonal_2 in ['MAS', 'SAM']
             
 
 name = "data/advent4.in"
@@ -28,6 +20,9 @@ with open(name) as file:
 
 print(total)
 
+
+# def is_inbound(x, y, n, m):
+#     return 0 <= x < n and 0 <= y < m
 
 # def xmas(x, y, lines, n, m):
 #     strings = []
