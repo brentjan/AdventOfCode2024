@@ -15,7 +15,6 @@ def x_mas(x, y, lines, n, m):
         return 0
             
 
-# Bepaal oplossing (part 2)
 name = "data/advent4.in"
 total = 0
 
@@ -30,7 +29,7 @@ with open(name) as file:
 print(total)
 
 
-# def get_strings_part1(x, y, lines, n, m):
+# def xmas(x, y, lines, n, m):
 #     strings = []
 #     for dx in [-1, 0, 1]:
 #         for dy in [-1, 0, 1]:
