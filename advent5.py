@@ -1,34 +1,71 @@
-from copy import deepcopy
+def check_update(update, inverted_graph):
+    printed = set()
 
-
-def check_update(update, rules):
-    #crules = deepcopy(rules)
-    already_printed = set()
-    #before = set()
-
-    for page in update:
-        for rule_page, should_come_after in rules.items():
-            if page in should_come_after and rule_page in already_printed:
-                return False
-            
-        rules.pop(page)
-        already_printed.add(page)
+    for node in update:
+        incoming_edges = inverted_graph.get(node, set())
         
+        for incoming_edge in incoming_edges:
+            if incoming_edge in update and incoming_edge not in printed:
+                return False
+
+        printed.add(node)
+
     return True
 
 
-def check_updates(updates, rules):
-    total_correct = 0
+def correct_update(update, inverted_graph):
+    correct_order = []
+
+    # Pre-process
+    relevant_graph = dict()
+    for node in update:
+        relevant_graph[node] = inverted_graph[node]
+
+    # Determine correct order
+    while update:
+        i = 0
+        node = update[i]
+
+        while not all(node in edges if other_node != node else True for other_node, edges in relevant_graph.items()):
+            i += 1
+            node = update[i]
+        
+        update.remove(node)
+        correct_order.append(node)
+        relevant_graph.pop(node)
+        
+    return correct_order
+
+
+def check_updates(updates, graph):
+    inverted_graph = invert_graph(graph)
+    middle_count = 0
+
     for update in updates:
-        total_correct += check_update(update, rules)
-    return total_correct
+        if not check_update(update, inverted_graph):
+            new_update = correct_update(update, inverted_graph)
+            middle_count += new_update[len(new_update) // 2]
+
+    return middle_count
 
 
-rules = dict()
+def invert_graph(graph):
+    all_nodes = set(graph.keys())
+    inverted_graph = dict()
+
+    for node, edges in graph.items():
+        inverted_edges = all_nodes.difference(edges).difference({node})
+        inverted_graph[node] = inverted_edges
+
+    return inverted_graph
+
+
+# Variables
+graph = dict()
 updates = []
 
 # Parse input
-with open("data/test.in") as file:
+with open("data/advent5.in") as file:
 
     parsing_rules = True
     for line in file:
@@ -36,12 +73,14 @@ with open("data/test.in") as file:
 
         if parsing_rules:
             a, b = line.rstrip().split('|')
-            rules.setdefault(int(a), set()).add(int(b))
+            graph.setdefault(int(a), set()).add(int(b))
+
+            if int(b) not in graph:
+                graph[int(b)] = set()
+
         elif line != '\n':
             updates.append(
                 list(map(int, line.rstrip().split(',')))
             )
 
-print(rules)
-print(check_updates(updates, rules))
-
+print(check_updates(updates, graph))
