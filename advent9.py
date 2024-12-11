@@ -37,7 +37,7 @@ def compact(disk):
 if __name__ == '__main__':
     disk = []
     
-    with open("data/advent9.in") as file:
+    with open("data/24-aoc-17.in") as file:
         full = True
         i = 0
         for line in file:
